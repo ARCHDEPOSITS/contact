@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .submission {
+            background-color: #333;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .remove-button {
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Submissions</h2>
+    <div id="submissionsContainer"></div>
+
+    <script>
+        function loadSubmissions() {
+            const submissionsContainer = document.getElementById('submissionsContainer');
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+
+            submissionsContainer.innerHTML = '';
+            submissions.forEach((submission, index) => {
+                const submissionElement = document.createElement('div');
+                submissionElement.className = 'submission';
+                submissionElement.innerHTML = `
+                    <p><strong>Reason:</strong> ${submission.reason}</p>
+                    <p><strong>Email:</strong> ${submission.email}</p>
+                    <p><strong>Name:</strong> ${submission.name}</p>
+                    <p><strong>Message:</strong> ${submission.message}</p>
+                    <button class="remove-button" onclick="removeSubmission(${index})">Remove</button>
+                `;
+                submissionsContainer.appendChild(submissionElement);
+            });
+        }
+
+        function removeSubmission(index) {
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            submissions.splice(index, 1);
+            localStorage.setItem('submissions', JSON.stringify(submissions));
+            loadSubmissions();
+        }
+
+        loadSubmissions();
+    </script>
+</body>
+</html>
